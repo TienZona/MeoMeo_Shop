@@ -1,14 +1,14 @@
 <?php   
+
     include '../layouts/default.php';
     include '../layouts/header.php';
     if(isset($_GET['act'])){
+
         $act = $_GET['act'];
         switch($act){
             case 'reg': 
                 include 'home.php';
-                include '../../modal/pdo.php';
-                include '../../modal/accounts.php';
-                include '../../modal/user.php';
+                
                 global $massage;
                 if($_SERVER['REQUEST_METHOD']=='POST'){
                     $fullname = $_POST['fullname'];
@@ -28,11 +28,12 @@
                         $id = getIdUser($email);
                         addAcount($Account, $id);
                         $massage = 'Đăng ký thành công!';
+                        echo "<meta http-equiv=\"refresh\" content=\"0;URL=..\login\index.php\">";
                     }
                 }
                 function add($data){ 
                     addAcount($data);
-                    echo "<meta http-equiv=\"refresh\" content=\"0;URL=..\login\index.php\">";
+                    
                 }
                 
                 break;

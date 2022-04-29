@@ -47,14 +47,14 @@
         }
     }
 
-    function checkPassword($password){
-        $sql = "select `password` from account where `password`='$password'";
+    function checkPassword($password1, $id){
+        $sql = "select `password` from account where `id_account`=$id";
         $datas = pdo_query($sql);
-        if($datas){
+        extract($datas[0]);
+        if($password1 == $password)
             return true;
-        }else{
+        else    
             return false;
-        }
     }
 
     function checkLogin($username, $password){

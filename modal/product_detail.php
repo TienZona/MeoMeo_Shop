@@ -73,3 +73,17 @@
         $sql = "delete from `product_detail` where `id_product`=$id_product";
         pdo_execute($sql);
     }
+
+    function getNumber($id, $color, $size){
+        $sql = "select `number` from `product_detail` where `id_product`=$id and `color`='$color' and `size`='$size'";
+        $data = pdo_query($sql);
+        extract($data[0]);
+        return $number;
+    }
+
+    function reduceNumber($id, $color, $size, $quantity){
+        $number = getNumber($id, $color, $size);
+        $number -= $quantity;
+        $sql = "update `product_detail` set `number`=$number where `id_product`=$id and `color`='$color' and `size`='$size'";
+        pdo_execute($sql);
+    }

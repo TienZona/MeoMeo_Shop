@@ -1,12 +1,4 @@
 <?php
-    include '../../modal/pdo.php';
-    include '../../modal/accounts.php';
-    include '../../modal/user.php';
-    include '../../modal/category.php';
-    include '../../modal/product.php';
-    include '../../modal/color.php';
-    include '../../modal/size.php';
-    include '../../modal/product_detail.php';
     include '../layouts/default.php';
     if(isset($_SESSION['rule']) && $_SESSION['rule'] == 'admin'){
         include '../layouts/header.php';
@@ -32,16 +24,12 @@
                 case 'updateAcc':
                     if($_SERVER['REQUEST_METHOD']=='POST'){
                         $id = $_GET["id"];
-                        $username = htmlspecialchars($_POST["username"]);
+                        $username = $_POST['username'];
                         $password = md5(htmlspecialchars($_POST["password"]));
-                        if(!checkUsername($username)){
-                            updateUserName($username, $id);
-                            updatePassWord($password, $id);
-                            echo "<meta http-equiv=\"refresh\" content=\"0;URL=..\admin\index.php?act=account\">";
-                            include 'account/home.php';
-                        }else{
-                            echo "<script type='text/javascript'>alert('Tên tài khoản đã được sử dụng!');</script>";
-                        }
+                        updateUserName($username, $id);
+                        updatePassWord($password, $id);
+                        echo "<meta http-equiv=\"refresh\" content=\"0;URL=..\admin\index.php?act=account\">";
+                        include 'account/home.php';
                     }
                     echo "<meta http-equiv=\"refresh\" content=\"0;URL=..\admin\index.php?act=account\">";
                     include 'account/home.php';
@@ -88,7 +76,7 @@
                             $id_category = htmlspecialchars($_POST['type']);
                             $description = htmlspecialchars($_POST['description']);
                             $price = $_POST['price'];
-                            $image = basename($_FILES["img"]["name"]);
+                            $image ="../../img/". basename($_FILES["file"]["name"]);
                             $product = new product(1,$name, $description, $price, $image, $id_category);
                             addProduct($product);
                             $id_product = getIdProduct($name);
@@ -101,8 +89,9 @@
                                 addProduct_detail($product_detail);
                                 $index++;
                             }
+                            echo "<script>alert('Thêm sản phẩm thành công!')</script>";
                         }else{
-                            // echo "<script>alert($errorImg)</script>";
+                            echo "<script>alert('Vui lòng tải ảnh sản phẩm!')</script>";
                         }
                     }
 
@@ -121,8 +110,8 @@
 
                     if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_GET['id']))){
                         $id = $_GET['id'];
-                        $image = basename($_FILES["file"]["name"]);
-                        if($image == ''){
+                        $image ="../../img/". basename($_FILES["file"]["name"]);
+                        if($image == '../../img/'){
                             $image = getImageOfProduct($id);
                         }
                         include 'upload.php';
@@ -185,6 +174,51 @@
                     include 'category/home.php';
                     break;
                 case 'order':
+                    if(isset($_GET['order'])){
+                        $actOrder = $_GET['order'];
+                        switch($actOrder){
+                            case 'all':
+                                $orders = getAllOrder(); break;
+                            case 'confirm':
+                                $orders = getAllOrderWaiting(); break;
+                            case 'transport':
+                                $orders = getAllOrderTransport(); break;
+                            case 'success':
+                                $orders = getAllOrderSuccess(); break;
+                            case 'cancel':
+                                $orders = getAllOrderCancel(); break;
+                            default:
+                                
+                        }
+                    }else{
+                        $actOrder = 'all';
+                        $orders = getAllOrder();
+                    }
+                    include 'order/home.php';
+                    break;
+                case 'confirmOrder':
+                    if(isset($_POST['id_orders'])){
+                        $id_orders = $_POST['id_orders'];
+                        foreach($id_orders as $id){
+                            $details = getOrder_detail($id);
+                            foreach($details as $detail){
+                                extract($detail);
+                                reduceNumber($id_product,  $color, $size, $quantity);
+                            }
+                            confirmOrder($id);
+                        }
+                    }
+
+                    include 'order/home.php';
+                    break;
+                case 'cancelOrder':
+                    if(isset($_POST['id_orders'])){
+                        $id_orders = $_POST['id_orders'];
+                        foreach($id_orders as $id){
+                            cancelOrder($id);
+                        }
+                    }
+
                     include 'order/home.php';
                     break;
                 case 'static':

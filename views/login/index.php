@@ -4,6 +4,7 @@
     }
     include '../layouts/default.php';
     include '../layouts/header.php';
+    
     if(isset($_GET['act'])){
         $act = $_GET['act'];
         switch($act){
@@ -11,9 +12,7 @@
                 include 'home.php';
                 break;
             case 'log':
-                include '../../modal/pdo.php';
-                include '../../modal/accounts.php';
-                include '../../modal/user.php';
+               
                 if($_SERVER['REQUEST_METHOD']=='POST'){
                     $username = $_POST['username'];
                     $password = md5($_POST['password']);
@@ -23,7 +22,9 @@
                         $fullname = getFullname($id_user);
                         $_SESSION['rule'] = $rule;
                         $_SESSION['user'] = $fullname;
+                        $_SESSION['id_user'] = $id_user;
                         echo "<meta http-equiv=\"refresh\" content=\"0;URL=..\home\index.php\">";
+                        echo "<script>alert('Đăng nhập thành công!')</script>";
                     }else{
                         $massage = 'Tên đăng nhập hoặc mật khẩu không đúng';
                     }
@@ -33,6 +34,7 @@
             case 'out':
                 unset($_SESSION['user']);
                 unset($_SESSION['rule']);
+                unset($_SESSION['id_user']);
                 echo "<meta http-equiv=\"refresh\" content=\"0;URL=index.php\">";
                 break;
             default:

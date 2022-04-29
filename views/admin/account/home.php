@@ -78,7 +78,7 @@
                           <label for="username" class="cols-sm-2 control-label">Tên tài khoản:</label>
                           <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
-                            <input id="username" type="text" class="form-control" name="username" id="username"  placeholder="Nhập tên tài khoản"/>
+                            <input id="username" disabled value="" type="text" class="form-control" name="username" id="username"  placeholder="Nhập tên tài khoản"/>
                             <div id="errorMassage" class="text-center err-username"></div>
                           </div>
                       </div>
@@ -126,6 +126,7 @@
   function handleModalUpdate(id, username){
     $("#form-update").attr("action", `index.php?act=updateAcc&id=${id}`);
     $('#username').val(username);
+    alert(username)
     return false;
   }
 

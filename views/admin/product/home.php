@@ -51,8 +51,8 @@
                     <td>$index</td>
                     <td width='70'>$id_product</td>
                     <td>$category</td>
-                    <td><img width='50' src='../../img/$image'></img></td>
-                    <td>$name</td>
+                    <td><img width='50' src='$image'></img></td>
+                    <td><p class='an'>$name</p></td>
                     <td width='250'><p class='an'>$description</p></td>
                     <td>$price</td>
                     <td>
@@ -89,7 +89,7 @@
                         <div class="col col-5">
                           <div class="form-group mb-4 text-center">
                             <h5>Ảnh sản phẩm</h5>
-                            <img id="img-show" name="img" width="200px" src="https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-6.png" alt="">
+                            <img id="img-show" name="img" width="200px" src="../../img/no-image.png" alt="">
                             <input id="img-file" type="file" name="file" onchange="uploadImg(event)">
                           </div>
                         </div>
@@ -252,7 +252,7 @@
 
   function handleModalUpdate(id, name, type, cost, des, arr, img){
     $("#form-add-product").attr("action", `index.php?act=updateProduct&id=${id}`);
-    $("#img-show").attr("src", `../../img/${img}`);
+    $("#img-show").attr("src", `${img}`);
     // $("#img-file").[0].files[0] = img;
     $("#name").val(name);
     $("#type").val(type);
@@ -282,7 +282,7 @@
 
   function setDefaultModalAdd(){
     $("#form-add-product").attr("action", `index.php?act=addProduct`);
-    $("#img-show").attr("src", 'https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-6.png');
+    $("#img-show").attr("src", '../../img/no-image.png');
     $("#name").val('');
     $("#type").val('');
     $("#price").val('');

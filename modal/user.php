@@ -41,6 +41,13 @@
         }
     }
 
+    function getUserById($id){
+        $sql = "select * from `user` where `id_user`=$id";
+        $user = pdo_query($sql);
+        return $user[0];
+    }
+    
+
     function getIdUser($email){
         $sql = "select `id_user` from `user` where `email`='$email'";
         $datas = pdo_query($sql);
@@ -53,6 +60,13 @@
         $datas = pdo_query($sql);
         extract($datas[0]);
         return $fullname;
+    }
+
+    function getAvatar($id){
+        $sql = "select `avatar` from `user` where `id_user`='$id'";
+        $datas = pdo_query($sql);
+        extract($datas[0]);
+        return $avatar;
     }
 
     function checkFullname($fullname){
@@ -88,7 +102,7 @@
     function addUser($User){
         $fullname = $User->getFullname();
         $email = $User->getEmail();
-        $sql = "insert into user(fullname, email) values('$fullname','$email')";
+        $sql = "insert into user(fullname, email, avatar) values('$fullname','$email', '../../img/none-avatar.png')";
         pdo_execute($sql);
     }
 
@@ -106,5 +120,10 @@
         $telephone = $User->getTelephone();
         $image = $User->getImage();
         $sql = "update `user` SET `fullname`='$fullname',`email`='$email',`gender`='$gender',`birthdate`='$birthdate',`address`='$address',`telephone`='$telephone',`avatar`='$image' WHERE `id_user`= $id";
+        pdo_execute($sql);
+    }
+
+    function updateAvatar($id, $avatar){
+        $sql = "update `user` set `avatar`='$avatar' where `id_user`=$id";
         pdo_execute($sql);
     }
